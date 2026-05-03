@@ -1,12 +1,16 @@
 package fr.natsystem.dchen.evaluation.entity;
 
 import java.time.LocalDate;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -41,5 +45,8 @@ public class Project {
 	
 	@Column(name = "PRJ_DATE_FIN")
 	private LocalDate dateFin;
+	
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "taskProject", cascade = CascadeType.ALL)
+	private Set<Task> tasks;
 
 }

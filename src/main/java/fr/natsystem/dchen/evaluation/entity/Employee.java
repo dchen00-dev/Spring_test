@@ -2,12 +2,21 @@ package fr.natsystem.dchen.evaluation.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -35,21 +44,48 @@ public class Employee {
 	
     @Size(max = 30,  message= "Employee name at most 30 characters")
 	@Column(name = "EMP_NOM")
-	private String nom;
+	private String empNom;
 	
     @Size(max = 30, message= "Job title at most 30 characters")
 	@Column(name = "EMP_JOB")
-	private String job;
-	
-	@Column(name = "EMP_BOSS_REF")
-	private Long bossReference;
+	private String empJob;
 	
 	@Column(name = "EMP_DATE_EMBAUCHE")
-	private LocalDate dateEmbauche;
+	private LocalDate empDateEmbauche;
 	
 	@Column(name = "EMP_SALAIRE")
-	private BigDecimal salaire;
+	private BigDecimal empSalaire;
 	
-	@Column(name = "EMP_DEPT_REF")
-	private Long deptReference;
+	
+    @OneToOne
+	@JoinColumn(name = "EMP_ID",   
+	referencedColumnName = "ADR_EMP_REF", 
+	nullable = true)
+	private Address empAddress;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "EMP_BOSS_RF", 
+			referencedColumnName = "EMP_ID", 
+			nullable  = true
+    )
+	private Employee empChef;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "empChef", cascade = CascadeType.ALL)
+	private Set<Employee> empSubordonnes;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "EMP_DEPT_REF", 
+		referencedColumnName = "DEP_ID", 
+		nullable = true)
+	private Department empDepartment;
+	
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "Z_PROJECT_PARTICIPATION", // Table de jointure
+        joinColumns = @JoinColumn(name = "PAR_EMP_REF"),
+        inverseJoinColumns =  @JoinColumn(name = "PAR_PRJ_REF")
+    )
+	private Set<Project> empProjects;
+
+	
 }

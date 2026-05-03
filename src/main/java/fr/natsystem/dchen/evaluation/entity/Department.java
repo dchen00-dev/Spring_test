@@ -1,10 +1,15 @@
 package fr.natsystem.dchen.evaluation.entity;
 
+import java.util.Set;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -36,6 +41,9 @@ public class Department {
 	
     @Size(max = 30, message= "Department localisation at most 30 characters")
 	@Column(name = "DEP_LOC")
-	private String depLoc;
+	private String depLocation;
+    
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "empDepartment", cascade = CascadeType.ALL)
+    private Set<Employee> depEmployees;
 	
 }

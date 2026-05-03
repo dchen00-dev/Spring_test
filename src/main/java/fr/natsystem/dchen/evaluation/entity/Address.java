@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -30,18 +32,21 @@ public class Address {
 	@SequenceGenerator(name = "address_seq", sequenceName = "Z_ADR_SQ", allocationSize = 1)
 	private Long id;
 	
-    @Size(max = 100,  message= "Adress at most 100 characters")
+    @Size(max = 100,  message= "Adresse at most 100 characters")
 	@Column(name = "ADR_ADRESSE")
-	private String libelle;
+	private String adrLibelle;
 	
     @Size(max = 30, message= "Ville at most 30 characters")
 	@Column(name = "ADR_VILLE")
-	private String ville;
+	private String adrVille;
 	
     @Size(max = 5, message= "Code at most 5 characters")
 	@Column(name = "ADR_CODE_POSTAL")	
-    private String codePostal;
+    private String adrCodePostal;
 	
-	@Column(name = "ADR_EMP_REF")
-	private Long empReference;
+    @OneToOne
+	@JoinColumn(name = "ADR_EMP_REF",   
+	referencedColumnName = "EMP_ID", 
+	nullable = true)
+	private Employee employee;
 }

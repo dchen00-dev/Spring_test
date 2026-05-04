@@ -19,6 +19,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -53,6 +55,8 @@ public class Employee {
 	@Column(name = "EMP_DATE_EMBAUCHE")
 	private LocalDate empDateEmbauche;
 	
+	@Min(value = 0)
+	@Max(value = 9999)
 	@Column(name = "EMP_SALAIRE")
 	private BigDecimal empSalaire;
 	
